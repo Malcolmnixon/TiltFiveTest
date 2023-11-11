@@ -119,7 +119,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
 
 	# Verify the controller
-	if not (get_parent() as T5Controller3D):
+	if not (get_parent() is T5Controller3D):
 		warnings.append("Pointer must be a child of a T5Controller3D")
 
 	return warnings
