@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cf7oa428dknbj"]
+
+[ext_resource type="PackedScene" uid="uid://bsn1sd86p2h30" path="res://addons/tiltfive_tools/staging/staging_base.tscn" id="1_jgelf"]
+[ext_resource type="PackedScene" uid="uid://bvoc83idthch2" path="res://demo/player.tscn" id="2_mbhmd"]
+
+[node name="Main" instance=ExtResource("1_jgelf")]
+main_scene = "res://demo/main_menu/main_menu.tscn"
+
+[node name="T5Manager" parent="." index="1"]
+glasses_scene = ExtResource("2_mbhmd")
