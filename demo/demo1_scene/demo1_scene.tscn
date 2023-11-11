@@ -53,25 +53,22 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 16, -2
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 22, -2, -6)
 
 [node name="Barrier" parent="Map" index="9" instance=ExtResource("9_xml00")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.971922, 0.0828986, -3.19069)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 0, -4)
 
 [node name="Barrier6" parent="Map" index="10" instance=ExtResource("9_xml00")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.02808, 0.0828986, -3.19069)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.028, 0, -3.191)
 
-[node name="Barrier7" parent="Map" index="11" instance=ExtResource("9_xml00")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.02808, 0.0828986, -3.19069)
+[node name="Barrier4" parent="Map" index="11" instance=ExtResource("9_xml00")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 0, -10)
 
-[node name="Barrier4" parent="Map" index="12" instance=ExtResource("9_xml00")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.971922, 0.0828986, -10.1907)
+[node name="Barrier5" parent="Map" index="12" instance=ExtResource("9_xml00")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1, 0, -9)
 
-[node name="Barrier5" parent="Map" index="13" instance=ExtResource("9_xml00")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.02808, 0.0828986, -9.19069)
+[node name="Barrier2" parent="Map" index="13" instance=ExtResource("9_xml00")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, -2, -7)
 
-[node name="Barrier2" parent="Map" index="14" instance=ExtResource("9_xml00")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.97192, -1.9171, -6.99069)
-
-[node name="Barrier3" parent="Map" index="15" instance=ExtResource("9_xml00")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.97192, -1.9171, -4.99069)
+[node name="Barrier3" parent="Map" index="14" instance=ExtResource("9_xml00")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -2, -5)
 
 [node name="EndArea" parent="." index="1" instance=ExtResource("3_d6shk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, -1, -6)
@@ -93,3 +90,4 @@ environment = SubResource("Environment_3o5lk")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." index="4"]
 transform = Transform3D(0.866025, -0.482963, 0.12941, 0, 0.258819, 0.965926, -0.5, -0.836516, 0.224144, 0, 4, 0)
+shadow_enabled = true
