@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bvoc83idthch2"]
 
-[ext_resource type="PackedScene" uid="uid://d2gkfypplc1mt" path="res://addons/tiltfive_tools/staging/player_base.tscn" id="1_lf2qe"]
+[ext_resource type="PackedScene" uid="uid://d2gkfypplc1mt" path="res://addons/tiltfive_tools/staging/player.tscn" id="1_lf2qe"]
 [ext_resource type="PackedScene" uid="uid://bfxa4y4qa6l67" path="res://addons/tiltfive_tools/functions/pointer.tscn" id="2_0h2fr"]
 
 [node name="PlayerBase" instance=ExtResource("1_lf2qe")]

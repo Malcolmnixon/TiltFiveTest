@@ -44,10 +44,10 @@ const VALID_MASK := 0b0000_0000_0001_0000_0000_0000_0000_0000
 @export var length : float = 1.0 : set = _set_length
 
 ## Player
-@export var player : T5ToolsPlayerBase
+@export var player : T5ToolsPlayer
 
 ## Action button
-@export var button : String = "button_1"
+@export var button : String = "trigger"
 
 @export_group("Laser")
 
@@ -98,6 +98,9 @@ var _last_at : Vector3
 # Controller
 var _controller : T5Controller3D
 
+# Last input float (for action buttons on float axes)
+var _last_input_float : float = 0.0
+
 
 func _ready() -> void:
 	# Do not initialise if in the editor
@@ -108,6 +111,7 @@ func _ready() -> void:
 	_controller = get_parent() as T5Controller3D
 	_controller.button_pressed.connect(_on_button_pressed)
 	_controller.button_released.connect(_on_button_released)
+	_controller.input_float_changed.connect(_on_input_float_changed)
 
 	# Update the pointer
 	_update_length()
@@ -151,7 +155,10 @@ func _physics_process(_delta : float) -> void:
 			new_target = $RayCast.get_collider()
 
 		# Test if the object is a valid hit
-		new_valid = (new_target.collision_layer & valid_mask) != 0
+		if not is_instance_valid(new_target) or not "collision_layer" in new_target:
+			new_target = null
+		else:
+			new_valid = (new_target.collision_layer & valid_mask) != 0
 
 	# Skip if no current and previous collision
 	if not new_target and not _last_target:
@@ -381,3 +388,15 @@ func _on_button_released(p_name : String) -> void:
 	_target = null
 
 
+func _on_input_float_changed(p_name : String, p_value : float) -> void:
+	# Ignore if not the active button
+	if p_name != button:
+		return
+
+	# Handle press/release with hysteresis
+	if p_value >= 0.75 and _last_input_float < 0.75:
+		_on_button_pressed(p_name)
+	elif p_value <= 0.25 and _last_input_float > 0.25:
+		_on_button_released(p_name)
+
+	_last_input_float = p_value

@@ -1,4 +1,4 @@
-class_name T5ToolsStagingBase
+class_name T5ToolsStaging
 extends Node3D
 
 
@@ -8,12 +8,12 @@ extends Node3D
 ## using "T5ToolsStagingBase.instance".
 
 
-signal player_created(player : T5ToolsPlayerBase)
-signal player_removed(player : T5ToolsPlayerBase)
-signal scene_pre_exiting(scene : T5ToolsSceneBase, user_data : Variant)
-signal scene_exiting(scene : T5ToolsSceneBase, user_data : Variant)
-signal scene_loaded(scene : T5ToolsSceneBase, user_data : Variant)
-signal scene_visible(scene : T5ToolsSceneBase, user_data : Variant)
+signal player_created(player : T5ToolsPlayer)
+signal player_removed(player : T5ToolsPlayer)
+signal scene_pre_exiting(scene : T5ToolsScene, user_data : Variant)
+signal scene_exiting(scene : T5ToolsScene, user_data : Variant)
+signal scene_loaded(scene : T5ToolsScene, user_data : Variant)
+signal scene_visible(scene : T5ToolsScene, user_data : Variant)
 
 
 ## Main scene
@@ -24,18 +24,18 @@ signal scene_visible(scene : T5ToolsSceneBase, user_data : Variant)
 var data : Dictionary = {}
 
 ## Array of players
-var players : Array[T5ToolsPlayerBase] = []
-
+var players : Array[T5ToolsPlayer] = []
 
 # The current scene
-var _current_scene : T5ToolsSceneBase
+var current_scene : T5ToolsScene
+
 
 # The fade tween
 var _fade_tween : Tween
 
 
 ## Instance of the staging
-static var instance : T5ToolsStagingBase
+static var instance : T5ToolsStaging
 
 
 func _enter_tree():
@@ -66,11 +66,11 @@ func do_load_scene(p_scene_path : String, user_data : Variant) -> void:
 	ResourceLoader.load_threaded_request(p_scene_path)
 
 	# Start by unloading the current scene
-	if _current_scene:
+	if current_scene:
 		# Report about to exit the current scene
 		print_verbose("StagingBase: Reporting scene_pre_exiting")
-		scene_pre_exiting.emit(_current_scene, user_data)
-		_current_scene.scene_pre_exiting(user_data)
+		scene_pre_exiting.emit(current_scene, user_data)
+		current_scene.scene_pre_exiting.emit(user_data)
 
 		# Fade to black
 		print_verbose("StagingBase: Fading out")
@@ -81,14 +81,14 @@ func do_load_scene(p_scene_path : String, user_data : Variant) -> void:
 
 		# Report the exit of the current scene
 		print_verbose("StagingBase: Reporting scene_exiting")
-		scene_exiting.emit(_current_scene, user_data)
-		_current_scene.scene_exiting(user_data)
+		scene_exiting.emit(current_scene, user_data)
+		current_scene.scene_exiting.emit(user_data)
 
 		# Discard the current scene
 		print_verbose("StagingBase: Discarding old scene")
-		$Scene.remove_child(_current_scene)
-		_current_scene.queue_free()
-		_current_scene = null
+		$Scene.remove_child(current_scene)
+		current_scene.queue_free()
+		current_scene = null
 
 		# Zero all player origins. The new scene can choose to relocate
 		# but it's safest to just zero in case
@@ -101,13 +101,13 @@ func do_load_scene(p_scene_path : String, user_data : Variant) -> void:
 
 	# Instantiate the scene
 	print_verbose("StagingBase: Instantiating new scene")
-	_current_scene = new_scene.instantiate()
-	$Scene.add_child(_current_scene)
+	current_scene = new_scene.instantiate()
+	$Scene.add_child(current_scene)
 
 	# Report the new scene is loaded
 	print_verbose("StagingBase: Reporting scene_loaded")
-	_current_scene.scene_loaded(user_data)
-	scene_loaded.emit(_current_scene, user_data)
+	current_scene.scene_loaded.emit(user_data)
+	scene_loaded.emit(current_scene, user_data)
 
 	# Fade to visible
 	print_verbose("StagingBase: Fading in")
@@ -118,8 +118,8 @@ func do_load_scene(p_scene_path : String, user_data : Variant) -> void:
 
 	# Report the new scene is visible
 	print_verbose("StagingBase: Reporting scene_visible")
-	_current_scene.scene_visible(user_data)
-	scene_visible.emit(_current_scene, user_data)
+	current_scene.scene_visible.emit(user_data)
+	scene_visible.emit(current_scene, user_data)
 
 
 func _set_fade(p_fade : float) -> void:
@@ -133,14 +133,14 @@ func _set_fade(p_fade : float) -> void:
 
 
 # Handle player added
-func _on_player_scene_added(player : T5ToolsPlayerBase):
+func _on_player_scene_added(player : T5ToolsPlayer):
 	print_verbose("StagingBase: Player %s added" % player)
 	players.append(player)
 	player_created.emit(player)
 
 
 # Handle player removed
-func _on_player_scene_removed(player : T5ToolsPlayerBase):
+func _on_player_scene_removed(player : T5ToolsPlayer):
 	print_verbose("StagingBase: Player %s removed" % player)
 	players.erase(player)
 	player_removed.emit(player)

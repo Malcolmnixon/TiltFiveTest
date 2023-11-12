@@ -11,7 +11,7 @@ extends Camera3D
 
 func _ready() -> void:
 	# Subscribe to scene loaded (reset camera)
-	T5ToolsStagingBase.instance.scene_loaded.connect(_on_scene_loaded)
+	T5ToolsStaging.instance.scene_loaded.connect(_on_scene_loaded)
 
 
 func _process(_delta : float) -> void:
@@ -40,7 +40,7 @@ func _on_scene_loaded(_scene, _user_data) -> void:
 # Calculate the target (average of player origins)
 func _target() -> Vector3:
 	# Get the players
-	var players := T5ToolsStagingBase.instance.players
+	var players := T5ToolsStaging.instance.players
 	if players.is_empty():
 		return Vector3.ZERO
 	

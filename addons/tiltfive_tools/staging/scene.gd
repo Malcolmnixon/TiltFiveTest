@@ -1,5 +1,11 @@
-class_name T5ToolsSceneBase
+class_name T5ToolsScene
 extends Node3D
+
+
+signal scene_pre_exiting(user_data : Variant)
+signal scene_exiting(user_data : Variant)
+signal scene_loaded(user_data : Variant)
+signal scene_visible(user_data : Variant)
 
 
 ## Character scene
@@ -10,18 +16,14 @@ extends Node3D
 
 
 ## Array of characters
-var characters : Array[T5ToolsCharacterBase] = []
+var characters : Array[T5ToolsCharacter] = []
 
 
-func scene_pre_exiting(_user_data : Variant) -> void:
-	pass
+func _ready():
+	scene_loaded.connect(_on_scene_loaded)
 
 
-func scene_exiting(_user_data : Variant) -> void:
-	pass
-
-
-func scene_loaded(user_data : Variant) -> void:
+func _on_scene_loaded(user_data : Variant) -> void:
 	# Skip if we dont have characters to instance
 	if !character_scene:
 		return
@@ -50,11 +52,11 @@ func scene_loaded(user_data : Variant) -> void:
 			spawn_transform = spawn_position
 
 	# Spawn the player characters
-	var players := T5ToolsStagingBase.instance.players
+	var players := T5ToolsStaging.instance.players
 	var count = players.size()
 	for index in count:
 		# Construct the character
-		var character : T5ToolsCharacterBase = character_scene.instantiate()
+		var character : T5ToolsCharacter = character_scene.instantiate()
 		character.player = players[index]
 
 		# Add the character to the scene
@@ -67,7 +69,3 @@ func scene_loaded(user_data : Variant) -> void:
 		# Position the character
 		character.global_transform = spawn_transform
 		character.global_position += offset
-
-
-func scene_visible(_user_data : Variant) -> void:
-	pass

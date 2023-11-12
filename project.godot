@@ -23,6 +23,10 @@ T5Interface="*res://addons/tiltfive/T5Interface.gd"
 
 settings/stdout/verbose_stdout=true
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/tiltfive/plugin.cfg")
+
 [layer_names]
 
 3d_physics/layer_1="Static World"

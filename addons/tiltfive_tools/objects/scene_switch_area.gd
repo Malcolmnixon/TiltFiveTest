@@ -39,4 +39,4 @@ func _on_body_entered(body : Node3D) -> void:
 
 	# Disable to prevent repeated invocation
 	enabled = false
-	T5ToolsStagingBase.load_scene(target_scene, location)
+	T5ToolsStaging.load_scene(target_scene, location)

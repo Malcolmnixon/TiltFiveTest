@@ -24,7 +24,7 @@ enum Type {
 var event_type : Type
 
 ## Player
-var player : T5ToolsPlayerBase
+var player : T5ToolsPlayer
 
 ## Pointer generating event
 var pointer : Node3D
@@ -42,7 +42,7 @@ var last_position : Vector3
 ## Initialize a new instance of the T5ToolsPointerEvent class
 func _init(
 		p_event_type : Type,
-		p_player : T5ToolsPlayerBase,
+		p_player : T5ToolsPlayer,
 		p_pointer : Node3D,
 		p_target : Node3D,
 		p_position : Vector3,
@@ -57,7 +57,7 @@ func _init(
 
 ## Report a pointer entered event
 static func entered(
-		player : T5ToolsPlayerBase,
+		player : T5ToolsPlayer,
 		pointer : Node3D,
 		target : Node3D,
 		at : Vector3) -> void:
@@ -73,7 +73,7 @@ static func entered(
 
 ## Report pointer moved event
 static func moved(
-		player : T5ToolsPlayerBase,
+		player : T5ToolsPlayer,
 		pointer : Node3D,
 		target : Node3D,
 		to : Vector3,
@@ -90,7 +90,7 @@ static func moved(
 
 ## Report pointer pressed event
 static func pressed(
-		player : T5ToolsPlayerBase,
+		player : T5ToolsPlayer,
 		pointer : Node3D,
 		target : Node3D,
 		at : Vector3) -> void:
@@ -106,7 +106,7 @@ static func pressed(
 
 ## Report pointer released event
 static func released(
-		player : T5ToolsPlayerBase,
+		player : T5ToolsPlayer,
 		pointer : Node3D,
 		target : Node3D,
 		at : Vector3) -> void:
@@ -122,7 +122,7 @@ static func released(
 
 ## Report a pointer exited event
 static func exited(
-		player : T5ToolsPlayerBase,
+		player : T5ToolsPlayer,
 		pointer : Node3D,
 		target : Node3D,
 		last : Vector3) -> void:

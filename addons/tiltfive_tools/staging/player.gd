@@ -1,4 +1,4 @@
-class_name T5ToolsPlayerBase
+class_name T5ToolsPlayer
 extends T5GlassesBase
 
 

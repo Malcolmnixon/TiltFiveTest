@@ -56,7 +56,6 @@ text = "Demo 1
 [node name="Demo2" type="Button" parent="Margin/VBoxContainer/Demo12"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-disabled = true
 text = "Demo 2
 "
 

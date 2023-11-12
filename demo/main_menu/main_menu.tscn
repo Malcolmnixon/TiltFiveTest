@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://1uyp1upvrhmd"]
 
-[ext_resource type="PackedScene" uid="uid://dslrsg4cn04o4" path="res://addons/tiltfive_tools/staging/scene_base.tscn" id="1_e4qwb"]
+[ext_resource type="PackedScene" uid="uid://dslrsg4cn04o4" path="res://addons/tiltfive_tools/staging/scene.tscn" id="1_e4qwb"]
 [ext_resource type="PackedScene" uid="uid://0l6uvyibyfq7" path="res://addons/tiltfive_tools/objects/viewport/viewport_2d_in_3d.tscn" id="2_8u0ar"]
 [ext_resource type="PackedScene" uid="uid://dkjxuanprob03" path="res://demo/main_menu/main_menu_2d.tscn" id="3_s11b2"]
 
