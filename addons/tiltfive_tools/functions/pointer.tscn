@@ -1,42 +1,46 @@
 [gd_scene load_steps=7 format=3 uid="uid://bfxa4y4qa6l67"]
 
 [ext_resource type="Script" path="res://addons/tiltfive_tools/functions/pointer.gd" id="1_m1tpg"]
-[ext_resource type="Material" uid="uid://cde5b4q101dwm" path="res://addons/tiltfive_tools/materials/laser_pointer_miss.tres" id="2_6rp45"]
-[ext_resource type="Material" uid="uid://c1ilt6y1m7kw1" path="res://addons/tiltfive_tools/materials/laser_pointer_hit.tres" id="3_p0e0y"]
 [ext_resource type="Material" uid="uid://c8ye6ka8dr43g" path="res://addons/tiltfive_tools/materials/laser_spot.tres" id="4_a6ihw"]
+[ext_resource type="Shader" path="res://addons/tiltfive_tools/functions/pointer.gdshader" id="5_fnea0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kby4w"]
+render_priority = -10
+shader = ExtResource("5_fnea0")
+shader_parameter/color = Color(0, 0, 1, 1)
+shader_parameter/forward = Vector3(0, -0.25, 0)
+shader_parameter/target = Vector3(0, -1, 1)
+shader_parameter/target_up = Vector3(0, 0, -0.25)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_gkb5n"]
-uv2_padding = 1.0
-top_radius = 0.005
-bottom_radius = 0.005
+top_radius = 0.01
+bottom_radius = 0.01
 height = 1.0
 radial_segments = 8
-rings = 1
+rings = 32
 cap_top = false
-cap_bottom = false
 
 [sub_resource type="SphereMesh" id="SphereMesh_m7bus"]
 radius = 0.05
-height = 0.02
+height = 0.1
 radial_segments = 12
 rings = 6
 
 [node name="Pointer" type="Node3D"]
 script = ExtResource("1_m1tpg")
-laser_material = ExtResource("2_6rp45")
-laser_hit_material = ExtResource("3_p0e0y")
 target_material = ExtResource("4_a6ihw")
 collision_mask = 5243135
 valid_mask = 5242880
 
 [node name="RayCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 0, 0)
 target_position = Vector3(0, 0, -1)
 collision_mask = 5243135
 
 [node name="Laser" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.91069e-15, -4.37114e-08, 1, -1, -4.37114e-08, 0, 4.37114e-08, -1, -4.37114e-08, 0, 0, -0.5)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_kby4w")
 mesh = SubResource("CylinderMesh_gkb5n")
-surface_material_override/0 = ExtResource("2_6rp45")
 
 [node name="Target" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
