@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvoc83idthch2"]
+[gd_scene load_steps=4 format=3 uid="uid://bvoc83idthch2"]
 
 [ext_resource type="PackedScene" uid="uid://d2gkfypplc1mt" path="res://addons/tiltfive_tools/staging/player.tscn" id="1_lf2qe"]
 [ext_resource type="PackedScene" uid="uid://bfxa4y4qa6l67" path="res://addons/tiltfive_tools/functions/pointer.tscn" id="2_0h2fr"]
+[ext_resource type="PackedScene" uid="uid://go1j5dbhtx3l" path="res://addons/tiltfive_tools/functions/board_scale.tscn" id="3_u35xw"]
 
 [node name="PlayerBase" instance=ExtResource("1_lf2qe")]
 
@@ -11,3 +12,5 @@ gameboard_scale = 10.0
 [node name="Pointer" parent="Origin/Wand_1" index="0" node_paths=PackedStringArray("player") instance=ExtResource("2_0h2fr")]
 length = 10.0
 player = NodePath("../../..")
+
+[node name="BoardScale" parent="Origin/Wand_1" index="1" instance=ExtResource("3_u35xw")]

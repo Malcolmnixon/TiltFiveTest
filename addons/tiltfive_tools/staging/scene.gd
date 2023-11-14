@@ -69,3 +69,13 @@ func _on_scene_loaded(user_data : Variant) -> void:
 		# Position the character
 		character.global_transform = spawn_transform
 		character.global_position += offset
+
+
+## Get the current scene
+static func get_current() -> T5ToolsScene:
+	# If we have an active stage then query it for the current scene
+	if T5ToolsStaging.instance:
+		return T5ToolsStaging.instance.current_scene
+
+	# No current scene
+	return null

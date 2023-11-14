@@ -95,19 +95,6 @@ const VALID_MASK := 0b0000_0000_0001_0000_0000_0000_0000_0000
 @export var collide_with_areas : bool = false : set = _set_collide_with_areas
 
 
-# RayCast node
-@onready var _raycast : RayCast3D = $RayCast
-
-# Laser node
-@onready var _laser : MeshInstance3D = $Laser
-
-# Laser material
-@onready var _material : ShaderMaterial = $Laser.material_override
-
-# Target node
-@onready var _target : MeshInstance3D = $Target
-
-
 # Controller
 var _controller : T5Controller3D
 
@@ -123,8 +110,18 @@ var _last_valid : bool
 # Last collision point
 var _last_at : Vector3
 
-# Last input float (for action buttons on float axes)
-#var _last_input_float : float = 0.0
+
+# RayCast node
+@onready var _raycast : RayCast3D = $RayCast
+
+# Laser node
+@onready var _laser : MeshInstance3D = $Laser
+
+# Laser material
+@onready var _material : ShaderMaterial = $Laser.material_override
+
+# Target node
+@onready var _target : MeshInstance3D = $Target
 
 
 func _ready() -> void:
@@ -132,11 +129,10 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
-	# Get the controller
+	# Get the parent wand controller
 	_controller = get_parent() as T5Controller3D
 	_controller.button_pressed.connect(_on_button_pressed)
 	_controller.button_released.connect(_on_button_released)
-	#_controller.input_float_changed.connect(_on_input_float_changed)
 
 	# Get the laser shader material
 	_material = _laser.material_override
@@ -443,17 +439,3 @@ func _on_button_released(p_name : String) -> void:
 	# Report the release and unlock the target
 	_report_released(_locked_target, _last_at)
 	_locked_target = null
-
-
-#func _on_input_float_changed(p_name : String, p_value : float) -> void:
-#	# Ignore if not the active button
-#	if p_name != button:
-#		return
-#
-#	# Handle press/release with hysteresis
-#	if p_value >= 0.75 and _last_input_float < 0.75:
-#		_on_button_pressed(p_name)
-#	elif p_value <= 0.25 and _last_input_float > 0.25:
-#		_on_button_released(p_name)
-#
-#	_last_input_float = p_value

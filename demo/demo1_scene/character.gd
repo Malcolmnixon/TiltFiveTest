@@ -14,13 +14,14 @@ extends T5ToolsCharacter
 
 func _ready() -> void:
 	# Subscribe to player wand events
-	player.wand.button_pressed.connect(_on_button_pressed)
-	player.wand.input_vector2_changed.connect(_on_input_vector2_changed)
+	var controller := player.get_player_wand(0)
+	controller.button_pressed.connect(_on_button_pressed)
+	controller.input_vector2_changed.connect(_on_input_vector2_changed)
 
 
 func _process(_delta : float) -> void:
 	# Track the origin with the character body
-	player.origin.global_position = _body.global_position + Vector3(0, 2, 0)
+	player.get_player_origin().global_position = _body.global_position + Vector3(0, 2, 0)
 
 
 func _on_button_pressed(p_name : String) -> void:

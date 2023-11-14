@@ -11,7 +11,8 @@ const ENEMY := preload("res://demo/demo2_scene/objects/enemy.tscn")
 
 func _ready():
 	# Hook when the scene is coming to a close
-	T5ToolsStaging.instance.current_scene.scene_pre_exiting.connect(_on_scene_pre_exiting)
+	var scene := T5ToolsScene.get_current()
+	scene.scene_pre_exiting.connect(_on_scene_pre_exiting)
 
 	# Wait a random amount of time then start the spawn timer
 	await get_tree().create_timer(randf_range(0.1, 1.0)).timeout

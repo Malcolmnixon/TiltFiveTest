@@ -13,7 +13,9 @@ var _exiting := false
 
 
 func _ready() -> void:
-	T5ToolsStaging.instance.current_scene.scene_pre_exiting.connect(_on_pre_exiting)
+	# Subscribe to scene events
+	var scene := T5ToolsScene.get_current()
+	scene.scene_pre_exiting.connect(_on_pre_exiting)
 
 
 func _on_pre_exiting(_user_data) -> void:

@@ -32,7 +32,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	return warnings
 
 
-func _on_body_entered(body : Node3D) -> void:
+func _on_body_entered(_body : Node3D) -> void:
 	# Skip if not enabled
 	if not enabled:
 		return

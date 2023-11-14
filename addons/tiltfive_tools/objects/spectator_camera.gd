@@ -43,9 +43,9 @@ func _target() -> Vector3:
 	var players := T5ToolsStaging.instance.players
 	if players.is_empty():
 		return Vector3.ZERO
-	
+
 	# Return the average of the origins
 	var pos := Vector3.ZERO
 	for player in players:
-		pos += player.origin.global_position
+		pos += player.get_player_origin().global_position
 	return pos / players.size()

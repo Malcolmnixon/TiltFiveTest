@@ -4,7 +4,7 @@ extends Node3D
 
 ## TiltFive Tools Staging Base
 ##
-## This node manages transitions between scenes. It can be accessed globally 
+## This node manages transitions between scenes. It can be accessed globally
 ## using "T5ToolsStagingBase.instance".
 
 
@@ -93,7 +93,7 @@ func do_load_scene(p_scene_path : String, user_data : Variant) -> void:
 		# Zero all player origins. The new scene can choose to relocate
 		# but it's safest to just zero in case
 		for player in players:
-			player.origin.global_transform = Transform3D.IDENTITY
+			player.get_player_origin().global_transform = Transform3D.IDENTITY
 
 	# Load the new scene
 	print_verbose("StagingBase: Loading new scene")
