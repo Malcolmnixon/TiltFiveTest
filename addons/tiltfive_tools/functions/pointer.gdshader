@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode depth_draw_always;
+render_mode unshaded, depth_draw_always, blend_add;
 
 uniform vec3 color : source_color = vec3(0.0, 0.0, 1.0);
 uniform vec3 forward = vec3(0.0, -0.25, 0.0);

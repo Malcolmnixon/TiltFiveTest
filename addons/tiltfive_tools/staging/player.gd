@@ -1,5 +1,5 @@
 class_name T5ToolsPlayer
-extends T5GlassesBase
+extends T5XRRig
 
 
 @onready var origin : T5Origin3D = get_node("Origin")
