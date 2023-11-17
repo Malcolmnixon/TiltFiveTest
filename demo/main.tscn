@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cy1vbgijgvfb0" path="res://addons/tiltfive_tools/objects/spectator_camera.tscn" id="3_vyvts"]
 
 [node name="Main" instance=ExtResource("1_jgelf")]
-main_scene = "res://demo/main_menu/main_menu.tscn"
+start_scene = "res://demo/main_menu/main_menu.tscn"
 
 [node name="T5Manager" parent="." index="1"]
 glasses_scene = ExtResource("2_mbhmd")

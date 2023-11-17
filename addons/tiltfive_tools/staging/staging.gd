@@ -16,8 +16,8 @@ signal scene_loaded(scene : T5ToolsScene, user_data : Variant)
 signal scene_visible(scene : T5ToolsScene, user_data : Variant)
 
 
-## Main scene
-@export_file('*.tscn') var main_scene : String
+## Start scene
+@export_file('*.tscn') var start_scene : String
 
 
 ## Variable to hold general game-data
@@ -53,8 +53,8 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
-	# Start by loading the main scene
-	do_load_scene(main_scene, null)
+	# Start by loading the start scene
+	do_load_scene(start_scene, null)
 
 
 # Load a scene

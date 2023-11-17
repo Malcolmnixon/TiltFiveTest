@@ -60,25 +60,22 @@ const VALID_MASK := 0b0000_0000_0001_0000_0000_0000_0000_0000
 ## Bezier strength
 @export_range(0.1, 1.0, 0.05) var bezier_strength : float = 0.5
 
-## Laser radius
-@export var laser_radius : float = 0.01 : set = _set_laser_radius
+## Arc radius
+@export var arc_radius : float = 0.01 : set = _set_arc_radius
 
-## Laser pointer material
-@export var laser_color : Color = Color(0.0, 0.0, 1.0) : set = _set_laser_color
+## Arc pointer color
+@export var arc_color : Color = Color(0.0, 0.0, 1.0) : set = _set_arc_color
 
-## Laser pointer hit material
-@export var laser_hit_color : Color = Color(0.5, 0.5, 1.0) : set = _set_laser_hit_color
-
-## Show debug information
-@export var debug : bool = false
+## Arc pointer hit color
+@export var arc_hit_color : Color = Color(0.5, 0.5, 1.0) : set = _set_arc_hit_color
 
 @export_group("Target")
 
-## Laser target radius
+## Target radius
 @export var target_radius : float = 0.05 : set = _set_target_radius
 
-## Laser pointer target
-@export var target_material : Material = null : set = _set_target_material
+## Target color
+@export var target_color : Color = Color(0.5, 0.5, 1.0, 0.5) : set = _set_target_color
 
 @export_group("Collision")
 
@@ -114,14 +111,17 @@ var _last_at : Vector3
 # RayCast node
 @onready var _raycast : RayCast3D = $RayCast
 
-# Laser node
-@onready var _laser : MeshInstance3D = $Laser
+# Arc node
+@onready var _arc_mesh : MeshInstance3D = $Arc
 
-# Laser material
-@onready var _material : ShaderMaterial = $Laser.material_override
+# Arc material
+@onready var _arc_material : ShaderMaterial = $Arc.material_override
 
 # Target node
-@onready var _target : MeshInstance3D = $Target
+@onready var _target_mesh : MeshInstance3D = $Target
+
+# Target material
+@onready var _target_material : StandardMaterial3D = $Target.material_override
 
 
 func _ready() -> void:
@@ -133,9 +133,6 @@ func _ready() -> void:
 	_controller = get_parent() as T5Controller3D
 	_controller.button_pressed.connect(_on_button_pressed)
 	_controller.button_released.connect(_on_button_released)
-
-	# Get the laser shader material
-	_material = _laser.material_override
 
 	# Update the pointer
 	_update_ray()
@@ -233,7 +230,8 @@ func _physics_process(_delta : float) -> void:
 func _set_enabled(p_enabled : bool) -> void:
 	enabled = p_enabled
 	if is_inside_tree():
-		_update_laser()
+		_update_arc()
+		_update_target()
 
 
 func _set_length(p_length : float) -> void:
@@ -248,22 +246,22 @@ func _set_angle(p_angle : float) -> void:
 		_update_ray()
 
 
-func _set_laser_radius(p_laser_radius : float) -> void:
-	laser_radius = p_laser_radius
+func _set_arc_radius(p_arc_radius : float) -> void:
+	arc_radius = p_arc_radius
 	if is_inside_tree():
-		_update_laser()
+		_update_arc()
 
 
-func _set_laser_color(p_laser_color : Color) -> void:
-	laser_color = p_laser_color
+func _set_arc_color(p_arc_color : Color) -> void:
+	arc_color = p_arc_color
 	if is_inside_tree():
-		_update_laser()
+		_update_arc()
 
 
-func _set_laser_hit_color(p_laser_hit_color : Color) -> void:
-	laser_hit_color = p_laser_hit_color
+func _set_arc_hit_color(p_arc_hit_color : Color) -> void:
+	arc_hit_color = p_arc_hit_color
 	if is_inside_tree():
-		_update_laser()
+		_update_arc()
 
 
 func _set_target_radius(p_target_radius : float) -> void:
@@ -272,8 +270,8 @@ func _set_target_radius(p_target_radius : float) -> void:
 		_update_target()
 
 
-func _set_target_material(p_target_material : Material) -> void:
-	target_material = p_target_material
+func _set_target_color(p_target_color : Color) -> void:
+	target_color = p_target_color
 	if is_inside_tree():
 		_update_target()
 
@@ -305,12 +303,12 @@ func _set_collide_with_areas(p_collide_with_areas : bool) -> void:
 func _update_ray() -> void:
 	_raycast.rotation_degrees.x = -angle
 	_raycast.target_position.z = -length
-	_update_laser()
+	_update_arc()
 
 
-func _update_laser() -> void:
-	_laser.mesh.top_radius = laser_radius
-	_laser.mesh.bottom_radius = laser_radius
+func _update_arc() -> void:
+	_arc_mesh.mesh.top_radius = arc_radius
+	_arc_mesh.mesh.bottom_radius = arc_radius
 
 	if enabled and _last_target:
 		_visible_hit(_last_valid, _last_at)
@@ -319,9 +317,9 @@ func _update_laser() -> void:
 
 
 func _update_target() -> void:
-	_target.mesh.radius = target_radius
-	_target.mesh.height = target_radius * 2.0
-	_target.set_surface_override_material(0, target_material)
+	_target_mesh.mesh.radius = target_radius
+	_target_mesh.mesh.height = target_radius * 2.0
+	_target_material.albedo_color = target_color
 
 
 func _update_collision():
@@ -330,16 +328,10 @@ func _update_collision():
 	_raycast.collide_with_areas = collide_with_areas
 
 
-func _update_laser_active_color(hit : bool) -> void:
-	# Get the material
-	var color = laser_hit_color if hit else laser_color
-
-	# Show or hide the laser
-	if _material:
-		_material.set_shader_parameter("color", color)
-		_laser.visible = true
-	else:
-		_laser.visible = false
+func _update_arc_active_color(hit : bool) -> void:
+	_arc_material.set_shader_parameter(
+		"color", 
+		arc_hit_color if hit else arc_color)
 
 
 func _report_entered(target : Node3D, at : Vector3) -> void:
@@ -369,38 +361,35 @@ func _report_released(target : Node3D, at : Vector3) -> void:
 
 func _visible_hit(valid : bool, at : Vector3) -> void:
 	# If enabled, show the target
-	_target.global_position = at
-	_target.visible = valid and target_material
+	_target_mesh.global_position = at
+	_target_mesh.visible = valid
 
 	# Update the laser
-	_update_laser_active_color(valid)
-	_update_laser_arc(at)
-	#var hit_length := at.distance_to(global_position)
-	#_laser.mesh.height = hit_length
-	#_laser.position.z = hit_length * -0.5
+	_update_arc_active_color(valid)
+	_update_arc_curve(at)
 
 
 func _visible_move(at : Vector3) -> void:
 	# If enabled, show the target
-	_target.global_position = at
+	_target_mesh.global_position = at
 
 	# Update the laser
-	_update_laser_arc(at)
+	_update_arc_curve(at)
 
 
 func _visible_miss() -> void:
 	# Update the target
-	_target.visible = false
+	_target_mesh.visible = false
 
 	# Calculate a fake at vector
 	var at := _raycast.to_global(Vector3(0, 0, -length))
 
 	# Update the laser
-	_update_laser_active_color(false)
-	_update_laser_arc(at)
+	_update_arc_active_color(false)
+	_update_arc_curve(at)
 
 
-func _update_laser_arc(at : Vector3) -> void:
+func _update_arc_curve(at : Vector3) -> void:
 	var raycast_transform := _raycast.global_transform
 
 	var distance := at.distance_to(raycast_transform.origin)
@@ -409,16 +398,15 @@ func _update_laser_arc(at : Vector3) -> void:
 	var forward := Vector3(0, -1, 0)
 	var up := (Vector3.UP + raycast_transform.basis.z).normalized()
 
-	var inv := _laser.global_transform.affine_inverse()
+	var inv := _arc_mesh.global_transform.affine_inverse()
 	var target := inv * at
 	var target_up := inv.basis * up
 	target_up.z -= abs(target_up.x)
 	target_up.x = 0.0
 
-	if _material:
-		_material.set_shader_parameter("forward", forward * distance * bezier_strength)
-		_material.set_shader_parameter("target", target)
-		_material.set_shader_parameter("target_up", target_up * distance * bezier_strength)
+	_arc_material.set_shader_parameter("forward", forward * distance * bezier_strength)
+	_arc_material.set_shader_parameter("target", target)
+	_arc_material.set_shader_parameter("target_up", target_up * distance * bezier_strength)
 
 
 func _on_button_pressed(p_name : String) -> void:

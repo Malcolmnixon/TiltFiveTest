@@ -1,7 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bfxa4y4qa6l67"]
 
 [ext_resource type="Script" path="res://addons/tiltfive_tools/functions/pointer.gd" id="1_m1tpg"]
-[ext_resource type="Material" uid="uid://c8ye6ka8dr43g" path="res://addons/tiltfive_tools/materials/laser_spot.tres" id="4_a6ihw"]
 [ext_resource type="Shader" path="res://addons/tiltfive_tools/functions/pointer.gdshader" id="5_fnea0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kby4w"]
@@ -21,6 +20,14 @@ radial_segments = 8
 rings = 32
 cap_top = false
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yukef"]
+resource_local_to_scene = true
+transparency = 1
+blend_mode = 1
+depth_draw_mode = 1
+shading_mode = 0
+albedo_color = Color(0, 0, 0.498039, 0.498039)
+
 [sub_resource type="SphereMesh" id="SphereMesh_m7bus"]
 radius = 0.05
 height = 0.1
@@ -29,7 +36,6 @@ rings = 6
 
 [node name="Pointer" type="Node3D"]
 script = ExtResource("1_m1tpg")
-target_material = ExtResource("4_a6ihw")
 collision_mask = 5243135
 valid_mask = 5242880
 
@@ -38,12 +44,12 @@ transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 
 target_position = Vector3(0, 0, -1)
 collision_mask = 5243135
 
-[node name="Laser" type="MeshInstance3D" parent="."]
+[node name="Arc" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_kby4w")
 mesh = SubResource("CylinderMesh_gkb5n")
 
 [node name="Target" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+material_override = SubResource("StandardMaterial3D_yukef")
 mesh = SubResource("SphereMesh_m7bus")
-surface_material_override/0 = ExtResource("4_a6ihw")
