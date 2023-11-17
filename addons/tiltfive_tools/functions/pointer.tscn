@@ -5,6 +5,7 @@
 [ext_resource type="Shader" path="res://addons/tiltfive_tools/functions/pointer.gdshader" id="5_fnea0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kby4w"]
+resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("5_fnea0")
 shader_parameter/color = Color(0, 0, 1, 1)
