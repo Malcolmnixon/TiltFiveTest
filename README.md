@@ -4,15 +4,18 @@ This test project is a development area for the construction of the Godot Tilt F
 The Tilt Five Tools asset builds on the [TiltFiveGodot4](https://github.com/GodotVR/TiltFiveGodot4) asset.
 
 
-## How To Use
+## Getting Started
 
-At this point the repository should be checked out to a new folder and opened in Godot. In the future
-the initial project configuration will start by:
+At this point the repository can be checked out with the basic infrastructure and two mini-games.
+In the future the following will be the steps to construct a new project.
 
-1. Installing the TiltFiveGodot4 asset and enabling the plugin
-2. Installing the TiltFiveTools asset
+### Initial Project Setup
 
-The initial game infrastructure is created by:
+1. Install the TiltFiveGodot4 asset and enabling the plugin
+2. Install the TiltFiveTools asset
+
+
+### Basic Game Infrastructure
 
 1. Create a Custom Main scene (extending from Tilt Five Tools "Staging")
 2. Create a Custom Player scene (extending from Tilt Five tools "Player")
@@ -22,12 +25,12 @@ The initial game infrastructure is created by:
    * Use the Custom Player scene as its T5Manager Glasses scene
    * Use the starting Game scene as its starting scene to initially load
 
-The game infrastructure is then customized by:
+### Customizing
 
-* Adding a Spectator Camera to the Custom Main scene
-* Adding pointers or effects to the the Custom Player scene
-* Populating objects in the Custom Start scene
-* Constructing characters (extending from Tilt Five Tools "Character")
+* Add a Spectator Camera to the Custom Main scene
+* Add pointers or effects to the the Custom Player scene
+* Populate objects in the Custom Start scene
+* Construct characters (extending from Tilt Five Tools "Character")
 * Handle player wand inputs and for the character
-* Adding new Game scenes and the logic to transition between them
-* Adding wand-pointer event handling scripts to objects
+* Add new Game scenes and the logic to transition between them
+* Add wand-pointer event handling scripts to objects
