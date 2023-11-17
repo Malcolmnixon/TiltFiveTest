@@ -11,11 +11,13 @@ Tilt Five Tools "Staging" to get scene switching and manage the players.
 It is configured to:
 * Load the main menu scene at start
 * Use the custom "player" scene for players
+* Adds a spectator camera
 
 The "player.tscn" scene extends from the Tilt Five Tools "Player" to get basic
 player behavior, and additionally:
 * Adds a Pointer to the wand
 * Adds Board Scale button support to the wand
+* Adds glasses and wand models for the spectator camera
 
 
 ## Main Menu

@@ -28,7 +28,8 @@ In the future the following will be the steps to construct a new project.
 ### Customizing
 
 * Add a Spectator Camera to the Custom Main scene
-* Add pointers or effects to the the Custom Player scene
+* Add pointers or effects to the the Custom Player scene for players
+* Add glasses and wand models to the Custom Player scene for spectators
 * Populate objects in the Custom Start scene
 * Construct characters (extending from Tilt Five Tools "Character")
 * Handle player wand inputs and for the character
