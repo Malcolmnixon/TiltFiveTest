@@ -2,7 +2,7 @@ class_name T5ToolsStaging
 extends Node3D
 
 
-## TiltFive Tools Staging Base
+## Tilt Five Tools Staging Base
 ##
 ## This node manages transitions between scenes. It can be accessed globally
 ## using "T5ToolsStagingBase.instance".
@@ -134,6 +134,7 @@ func _set_fade(p_fade : float) -> void:
 
 # Handle player added
 func _on_player_scene_added(player : T5ToolsPlayer):
+	player.player_number = _get_free_player_number()
 	print_verbose("StagingBase: Player %s added" % player)
 	players.append(player)
 	player_created.emit(player)
@@ -149,3 +150,14 @@ func _on_player_scene_removed(player : T5ToolsPlayer):
 ## Load the requested scene
 static func load_scene(p_scene_path : String, user_data : Variant = null) -> void:
 	instance.do_load_scene(p_scene_path, user_data)
+
+
+func _get_free_player_number() -> int:
+	# Check if player numbers 0..3 are available for use
+	for n in 4:
+		if not players.any(func(p : T5ToolsPlayer): p.player_number == n):
+			return n
+
+	# Warn and return an invalid player 4
+	push_warning("Players 0..3 already assigned. No ID for new player")
+	return -1

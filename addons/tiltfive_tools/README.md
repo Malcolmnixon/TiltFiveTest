@@ -5,6 +5,21 @@ This asset provides numerous helper scripts and nodes that work with
 Tilt Five experiences and games.
 
 
+## Visual Layers
+
+As Tilt Five is designed to work with multiple local players, it is sometimes
+necessary to limit what content is visible to the different players. This can
+be achieved using visual layers and camera cull masks. The following are the
+layer assignments used by Tilt Five Tools:
+* [1] Visible by Everyone
+* [2] Visible by Spectator
+* [3] Visible by All Players
+* [11] Visible to Player 1
+* [12] Visible to Player 2
+* [13] Visible to Player 3
+* [14] Visible to Player 4
+
+
 ## Functions
 
 This folder contains nodes for enhancing player scenes:

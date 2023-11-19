@@ -5,3 +5,5 @@
 
 [node name="Player" instance=ExtResource("1_h6rdt")]
 script = ExtResource("2_8665p")
+visible_layers = 5
+player_number = 0

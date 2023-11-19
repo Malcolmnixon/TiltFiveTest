@@ -46,8 +46,8 @@ const VALID_MASK := 0b0000_0000_0001_0000_0000_0000_0000_0000
 ## Pointer angle
 @export var angle : float = 25.0 : set = _set_angle
 
-## Player
-@export var player : T5ToolsPlayer
+## Visible layers
+@export_flags_3d_render var visible_layers : int = 2 : set = _set_visible_layers
 
 ## Action button
 @export var button : String = "trigger_click"
@@ -92,6 +92,9 @@ const VALID_MASK := 0b0000_0000_0001_0000_0000_0000_0000_0000
 @export var collide_with_areas : bool = false : set = _set_collide_with_areas
 
 
+# Player
+var _player : T5ToolsPlayer
+
 # Controller
 var _controller : T5Controller3D
 
@@ -129,12 +132,16 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
+	# Find the player
+	_player = T5ToolsPlayer.find_instance(self)
+
 	# Get the parent wand controller
 	_controller = get_parent() as T5Controller3D
 	_controller.button_pressed.connect(_on_button_pressed)
 	_controller.button_released.connect(_on_button_released)
 
 	# Update the pointer
+	_update_visible_layers()
 	_update_ray()
 	_update_target()
 	_update_collision()
@@ -246,6 +253,12 @@ func _set_angle(p_angle : float) -> void:
 		_update_ray()
 
 
+func _set_visible_layers(p_visible_layers : int) -> void:
+	visible_layers = p_visible_layers
+	if is_inside_tree():
+		_update_visible_layers()
+
+
 func _set_arc_radius(p_arc_radius : float) -> void:
 	arc_radius = p_arc_radius
 	if is_inside_tree():
@@ -300,6 +313,12 @@ func _set_collide_with_areas(p_collide_with_areas : bool) -> void:
 		_update_collision()
 
 
+func _update_visible_layers() -> void:
+	var layers := visible_layers | _player.get_player_visible_layer()
+	_arc_mesh.layers = layers
+	_target_mesh.layers = layers
+
+
 func _update_ray() -> void:
 	_raycast.rotation_degrees.x = -angle
 	_raycast.target_position.z = -length
@@ -336,27 +355,27 @@ func _update_arc_active_color(hit : bool) -> void:
 
 func _report_entered(target : Node3D, at : Vector3) -> void:
 	pointer_entered.emit(target, at)
-	T5ToolsPointerEvent.entered(player, self, target, at)
+	T5ToolsPointerEvent.entered(_player, self, target, at)
 
 
 func _report_moved(target : Node3D, to : Vector3, from : Vector3) -> void:
 	pointer_moved.emit(target, from, to)
-	T5ToolsPointerEvent.moved(player, self, target, to, from)
+	T5ToolsPointerEvent.moved(_player, self, target, to, from)
 
 
 func _report_exited(target : Node3D, at : Vector3) -> void:
 	pointer_exited.emit(target, at)
-	T5ToolsPointerEvent.exited(player, self, target, at)
+	T5ToolsPointerEvent.exited(_player, self, target, at)
 
 
 func _report_pressed(target : Node3D, at : Vector3) -> void:
 	pointer_pressed.emit(target, at)
-	T5ToolsPointerEvent.pressed(player, self, target, at)
+	T5ToolsPointerEvent.pressed(_player, self, target, at)
 
 
 func _report_released(target : Node3D, at : Vector3) -> void:
 	pointer_released.emit(target, at)
-	T5ToolsPointerEvent.released(player, self, target, at)
+	T5ToolsPointerEvent.released(_player, self, target, at)
 
 
 func _visible_hit(valid : bool, at : Vector3) -> void:

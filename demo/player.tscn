@@ -13,9 +13,8 @@ gameboard_scale = 10.0
 
 [node name="T5-glasses" parent="Origin/Camera" index="0" instance=ExtResource("2_plese")]
 
-[node name="Pointer" parent="Origin/Wand_1" index="0" node_paths=PackedStringArray("player") instance=ExtResource("2_0h2fr")]
+[node name="Pointer" parent="Origin/Wand_1" index="0" instance=ExtResource("2_0h2fr")]
 length = 10.0
-player = NodePath("../../..")
 
 [node name="BoardScale" parent="Origin/Wand_1" index="1" instance=ExtResource("3_u35xw")]
 
