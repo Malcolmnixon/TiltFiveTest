@@ -18,6 +18,7 @@ extends T5XRRig
 
 
 func _ready():
+	# Update the visibility mask
 	_update_camera_cull_mask()
 
 
@@ -47,13 +48,23 @@ func get_player_visible_layer() -> int:
 	if player_number < 0:
 		return 0
 
-	# Return the unique player layer
+	# Return the unique player layer [11..14]
+	return 1024 << player_number
+
+
+## Get the physics layer mask associated with this player
+func get_player_physics_layer() -> int:
+	# Handle invalid player number
+	if player_number < 0:
+		return 0
+
+	# Return the unique player layer [11..14]
 	return 1024 << player_number
 
 
 ## Find the T5ToolsPlayer from a child node
 static func find_instance(node : Node) -> T5ToolsPlayer:
-	# Walk the node tree
+	# Search the ancestors for a player node
 	while node:
 		# If we have the player then return it
 		if node is T5ToolsPlayer:
@@ -62,7 +73,7 @@ static func find_instance(node : Node) -> T5ToolsPlayer:
 		# Walk up to the parent
 		node = node.get_parent()
 
-	# Not found
+	# Could not find play
 	return null
 
 

@@ -12,6 +12,7 @@ ambient_light_color = Color(0.294118, 0.294118, 0.294118, 1)
 [node name="MainMenuScene" instance=ExtResource("1_e4qwb")]
 
 [node name="Screen" parent="." index="0" instance=ExtResource("2_8u0ar")]
+transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, -0.4, 0)
 scene = ExtResource("3_s11b2")
 update_mode = 2
 unshaded = true

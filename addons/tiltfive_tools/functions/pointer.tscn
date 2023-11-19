@@ -36,13 +36,11 @@ rings = 6
 
 [node name="Pointer" type="Node3D"]
 script = ExtResource("1_m1tpg")
-collision_mask = 5243135
-valid_mask = 5242880
 
 [node name="RayCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 0, 0)
 target_position = Vector3(0, 0, -1)
-collision_mask = 5243135
+collision_mask = 1048831
 
 [node name="Arc" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)

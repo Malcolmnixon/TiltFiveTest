@@ -4,23 +4,24 @@
 [ext_resource type="Script" path="res://addons/tiltfive_tools/objects/viewport/viewport_2d_in_3d_body.gd" id="2_36o6t"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_knvfo"]
+resource_local_to_scene = true
 size = Vector2(3, 2)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_wt6r0"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_0wmr2"]
 viewport_path = NodePath("Viewport")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fk21m"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkkvm"]
 transparency = 1
 cull_mode = 2
-albedo_texture = SubResource("ViewportTexture_wt6r0")
+albedo_texture = SubResource("ViewportTexture_0wmr2")
 texture_filter = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0qjn5"]
+resource_local_to_scene = true
 size = Vector3(3, 2, 0.02)
 
 [node name="Viewport2Din3D" type="Node3D"]
 script = ExtResource("1_xe5wg")
-collision_layer = 1048577
 alpha_scissor_threshold = 0.25
 unshaded = false
 filter = true
@@ -34,10 +35,10 @@ render_target_update_mode = 1
 
 [node name="Screen" type="MeshInstance3D" parent="."]
 mesh = SubResource("QuadMesh_knvfo")
-surface_material_override/0 = SubResource("StandardMaterial3D_fk21m")
+surface_material_override/0 = SubResource("StandardMaterial3D_gkkvm")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
-collision_layer = 1048577
+collision_layer = 1048576
 script = ExtResource("2_36o6t")
 viewport_size = Vector2(300, 200)
 

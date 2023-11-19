@@ -37,9 +37,6 @@ const VALID_MASK := 0b0000_0000_0001_0000_0000_0000_0000_0000
 
 @export_group("General")
 
-## Pointer enabled
-@export var enabled : bool = true : set = _set_enabled
-
 ## Pointer length
 @export var length : float = 1.0 : set = _set_length
 
@@ -98,6 +95,9 @@ var _player : T5ToolsPlayer
 # Controller
 var _controller : T5Controller3D
 
+# Valid mask including player
+var _player_valid_mask : int
+
 # Locked target
 var _locked_target : Node3D
 
@@ -109,6 +109,9 @@ var _last_valid : bool
 
 # Last collision point
 var _last_at : Vector3
+
+# Enabled flag
+var _enabled : bool
 
 
 # RayCast node
@@ -132,6 +135,9 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 
+	# Handle visibility changes
+	visibility_changed.connect(_update_enabled)
+
 	# Find the player
 	_player = T5ToolsPlayer.find_instance(self)
 
@@ -141,6 +147,7 @@ func _ready() -> void:
 	_controller.button_released.connect(_on_button_released)
 
 	# Update the pointer
+	_update_enabled()
 	_update_visible_layers()
 	_update_ray()
 	_update_target()
@@ -173,7 +180,7 @@ func _physics_process(_delta : float) -> void:
 	var new_target : Node3D
 	var new_valid : bool
 	var new_at : Vector3
-	if enabled and _controller.get_is_active() and _raycast.is_colliding():
+	if _enabled and _controller.get_is_active() and _raycast.is_colliding():
 		new_at = _raycast.get_collision_point()
 		if _locked_target:
 			# Locked to 'target'
@@ -186,7 +193,7 @@ func _physics_process(_delta : float) -> void:
 		if not is_instance_valid(new_target) or not "collision_layer" in new_target:
 			new_target = null
 		else:
-			new_valid = (new_target.collision_layer & valid_mask) != 0
+			new_valid = (new_target.collision_layer & _player_valid_mask) != 0
 
 	# Skip if no current and previous collision
 	if not new_target and not _last_target:
@@ -232,13 +239,6 @@ func _physics_process(_delta : float) -> void:
 	_last_target = new_target
 	_last_valid = new_valid
 	_last_at = new_at
-
-
-func _set_enabled(p_enabled : bool) -> void:
-	enabled = p_enabled
-	if is_inside_tree():
-		_update_arc()
-		_update_target()
 
 
 func _set_length(p_length : float) -> void:
@@ -313,6 +313,12 @@ func _set_collide_with_areas(p_collide_with_areas : bool) -> void:
 		_update_collision()
 
 
+func _update_enabled() -> void:
+	_enabled = is_visible_in_tree()
+	_update_arc()
+	_update_target()
+
+
 func _update_visible_layers() -> void:
 	var layers := visible_layers | _player.get_player_visible_layer()
 	_arc_mesh.layers = layers
@@ -329,7 +335,7 @@ func _update_arc() -> void:
 	_arc_mesh.mesh.top_radius = arc_radius
 	_arc_mesh.mesh.bottom_radius = arc_radius
 
-	if enabled and _last_target:
+	if _enabled and _last_target:
 		_visible_hit(_last_valid, _last_at)
 	else:
 		_visible_miss()
@@ -342,7 +348,14 @@ func _update_target() -> void:
 
 
 func _update_collision():
-	_raycast.collision_mask = collision_mask
+	# Get the player-specific layer
+	var player_layer := _player.get_player_physics_layer()
+
+	# Update the valid mask with player specific layers
+	_player_valid_mask = valid_mask | player_layer
+
+	# Set the raycast to collide with the collision with player-specific layers
+	_raycast.collision_mask = collision_mask | player_layer
 	_raycast.collide_with_bodies = collide_with_bodies
 	_raycast.collide_with_areas = collide_with_areas
 
@@ -379,31 +392,31 @@ func _report_released(target : Node3D, at : Vector3) -> void:
 
 
 func _visible_hit(valid : bool, at : Vector3) -> void:
-	# If enabled, show the target
+	# Show the target
 	_target_mesh.global_position = at
 	_target_mesh.visible = valid
 
-	# Update the laser
+	# Update the arc
 	_update_arc_active_color(valid)
 	_update_arc_curve(at)
 
 
 func _visible_move(at : Vector3) -> void:
-	# If enabled, show the target
+	# Update the target
 	_target_mesh.global_position = at
 
-	# Update the laser
+	# Update the arc
 	_update_arc_curve(at)
 
 
 func _visible_miss() -> void:
-	# Update the target
+	# Hide the target
 	_target_mesh.visible = false
 
-	# Calculate a fake at vector
+	# Calculate a fake "at" vector
 	var at := _raycast.to_global(Vector3(0, 0, -length))
 
-	# Update the laser
+	# Update the arc
 	_update_arc_active_color(false)
 	_update_arc_curve(at)
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dkjxuanprob03"]
 
-[ext_resource type="Texture2D" uid="uid://crovglpkjvq4f" path="res://demo/main_menu/border.png" id="1_jcjto"]
 [ext_resource type="Script" path="res://demo/main_menu/main_menu_2d.gd" id="1_x3j2v"]
+[ext_resource type="Texture2D" uid="uid://crovglpkjvq4f" path="res://demo/materials/border.png" id="2_6hykq"]
 
 [node name="MainMenu2D" type="Control"]
 layout_mode = 3
@@ -13,19 +13,25 @@ size_flags_vertical = 3
 script = ExtResource("1_x3j2v")
 
 [node name="Background" type="NinePatchRect" parent="."]
-layout_mode = 2
-offset_right = 300.0
-offset_bottom = 200.0
-texture = ExtResource("1_jcjto")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_6hykq")
 patch_margin_left = 10
 patch_margin_top = 10
 patch_margin_right = 10
 patch_margin_bottom = 10
 
 [node name="Margin" type="MarginContainer" parent="."]
-layout_mode = 2
-offset_right = 300.0
-offset_bottom = 200.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10

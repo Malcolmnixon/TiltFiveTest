@@ -2,11 +2,13 @@
 extends Node3D
 
 
-## XR ToolsViewport 2D in 3D
+## Tilt Five Tools Viewport2Din3D
 ##
-## This script manages a 2D scene rendered as a texture on a 3D quad.
-##
-## Pointer and keyboard input are mapped into the 2D scene.
+## This script manages a 2D scene rendered as a texture on a 3D quad. The
+## Visible and Collision layers control visibility and collision for all
+## players; however if the Viewport2Din3D is a child of a player then the
+## players visibility and collision are automatically included. This allows
+## for UIs specific to a player by adding them to the custom player scene.
 
 
 ## Signal for pointer events
@@ -49,8 +51,12 @@ const _DIRTY_SURFACE		:= 0x0200	# Surface material needs update
 const _DIRTY_REDRAW			:= 0x0400	# Redraw required
 const _DIRTY_ALL			:= 0x07FF	# All dirty
 
-# Default layer of 1:static-world, 21:pointable, 23:ui-objects
-const DEFAULT_LAYER := 0b0000_0000_0101_0000_0000_0000_0000_0001
+
+# Default visual layer of 1:Everyone
+const VISUAL_DEFAULT := 1
+
+# Default physics layer of 21:pointable
+const PHYSICS_DEFAULT := 0b0000_0000_0001_0000_0000_0000_0000_0000
 
 
 # Physics property group
@@ -59,11 +65,8 @@ const DEFAULT_LAYER := 0b0000_0000_0101_0000_0000_0000_0000_0001
 ## Physical screen size property
 @export var screen_size : Vector2 = Vector2(3.0, 2.0): set = set_screen_size
 
-## Viewport collision enabled property
-@export var enabled : bool = true: set = set_enabled
-
 ## Collision layer
-@export_flags_3d_physics var collision_layer : int = DEFAULT_LAYER: set = set_collision_layer
+@export_flags_3d_physics var collision_layer : int = PHYSICS_DEFAULT: set = set_collision_layer
 
 # Content property group
 @export_group("Content")
@@ -82,6 +85,9 @@ const DEFAULT_LAYER := 0b0000_0000_0101_0000_0000_0000_0000_0001
 
 # Rendering property group
 @export_group("Rendering")
+
+## Visible layers
+@export_flags_3d_render var visible_layers : int = VISUAL_DEFAULT : set = _set_visible_layers
 
 ## Custom material template
 @export var material : StandardMaterial3D = null: set = set_material
@@ -106,18 +112,28 @@ var time_since_last_update : float = 0.0
 var _screen_material : StandardMaterial3D
 var _dirty := _DIRTY_ALL
 
+# Owning player (null if global)
+var _player : T5ToolsPlayer
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	is_ready = true
 
+	# Test if this Viewport2Din3D is under a player
+	_player = T5ToolsPlayer.find_instance(self)
+
 	# Listen for pointer events on the screen body
 	$StaticBody3D.connect("pointer_event", _on_pointer_event)
 
+	# Update enabled based on visibility
+	visibility_changed.connect(_update_enabled)
+
 	# Apply physics properties
 	_update_screen_size()
-	_update_enabled()
+	_update_visible_layers()
 	_update_collision_layer()
+	_update_enabled()
 
 	# Update the render objects
 	_update_render()
@@ -235,13 +251,6 @@ func set_screen_size(new_size: Vector2) -> void:
 		_update_screen_size()
 
 
-## Set enabled property
-func set_enabled(is_enabled: bool) -> void:
-	enabled = is_enabled
-	if is_ready:
-		_update_enabled()
-
-
 ## Set collision layer property
 func set_collision_layer(new_layer: int) -> void:
 	collision_layer = new_layer
@@ -271,6 +280,12 @@ func set_update_mode(new_update_mode: UpdateMode) -> void:
 	_dirty |= _DIRTY_UPDATE
 	if is_ready:
 		_update_render()
+
+
+func _set_visible_layers(p_visible_layers) -> void:
+	visible_layers = p_visible_layers
+	if is_ready:
+		_update_visible_layers()
 
 
 ## Set material property
@@ -330,12 +345,33 @@ func _update_enabled() -> void:
 	if Engine.is_editor_hint():
 		return
 
-	$StaticBody3D/CollisionShape3D.disabled = !enabled
+	$StaticBody3D/CollisionShape3D.disabled = not is_visible_in_tree()
 
 
 # Collision layer update handler
 func _update_collision_layer() -> void:
-	$StaticBody3D.collision_layer = collision_layer
+	if Engine.is_editor_hint():
+		return
+
+	# Get the collision layers
+	var layer := collision_layer
+	if _player:
+		layer |= _player.get_player_physics_layer()
+
+	$StaticBody3D.collision_layer = layer
+
+
+# Visible layer update handler
+func _update_visible_layers() -> void:
+	if Engine.is_editor_hint():
+		return
+
+	# Get the visible layers
+	var layers := visible_layers
+	if _player:
+		layers |= _player.get_player_visible_layer()
+
+	$Screen.layers = layers
 
 
 # This complex function processes the render dirty flags and performs the

@@ -38,6 +38,10 @@ enabled=PackedStringArray("res://addons/tiltfive/plugin.cfg")
 3d_render/layer_14="Player 4"
 3d_physics/layer_1="Static World"
 3d_physics/layer_2="Dynamic World"
+3d_physics/layer_11="Player 1"
+3d_physics/layer_12="Player 2"
+3d_physics/layer_13="Player 3"
+3d_physics/layer_14="Player 4"
 3d_physics/layer_20="Character Body"
 3d_physics/layer_21="Pointable"
 
