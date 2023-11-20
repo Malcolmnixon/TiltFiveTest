@@ -155,7 +155,7 @@ static func load_scene(p_scene_path : String, user_data : Variant = null) -> voi
 func _get_free_player_number() -> int:
 	# Check if player numbers 0..3 are available for use
 	for n in 4:
-		if not players.any(func(p : T5ToolsPlayer): p.player_number == n):
+		if not players.any(func(p : T5ToolsPlayer) -> bool: return p.player_number == n):
 			return n
 
 	# Warn and return an invalid player 4

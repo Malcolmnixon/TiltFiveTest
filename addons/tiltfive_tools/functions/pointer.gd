@@ -362,7 +362,7 @@ func _update_collision():
 
 func _update_arc_active_color(hit : bool) -> void:
 	_arc_material.set_shader_parameter(
-		"color", 
+		"color",
 		arc_hit_color if hit else arc_color)
 
 

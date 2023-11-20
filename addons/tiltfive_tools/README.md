@@ -64,6 +64,8 @@ This folder contains nodes to help with standard Tilt Five behavior.
 | Viewport2Din3D | Render a 2D UI in 3D  with support for pointer interactions |
 | Scene Switch Area | An Area3D that can trigger Staging to load a different game scene |
 | Spectator Camera | A spectator camera that follows the average player origin/board position |
+| CharacterBody Controller | A demo controller for CharacterBody3D based characters |
+| RigidBody Controller | A demo controller for RigidBody3D based characters |
 
 
 ### Staging
@@ -133,24 +135,29 @@ will shrink items in the board making them 10x smaller.
    and save it in the game folder.
 
 2. Add an appropriate character body object (E.G. CharacterBody3D or RigidBody3D)
-   to the scene, and add a control script to it. In the control body scripts 
-   '_ready' method, the script should:
-   * Get the player using `T5ToolsCharacter.find_instance(self).player`
-   * Get the wand using `player.get_player_wand(0)`
-   * Subscribe to wand signals such as buttons and joystick
-   * Have the button and joystick signal handlers control the character body
+   to the scene, and add a control script to it. Two demo control scripts have
+   been provided to show how control can be implemented:
+   * objects/controllers/characterbody_controller.gd
+   * objects/controllers/rigidbody_controller.gd
 
 
 ### Center Game Board on Character
 
-The Origin node of the player scene represents the center of the game-board. 
-Keeping the character centered can be done by modifying the character control
-body scripts '_process' method to:
+The demo character body controller scripts already have an option to do this by
+moving the players Origin node (the center of the game board) to match the
+position of the character body.
 
-* Get the origin using `player.get_player_origin()`
-* Set the origins position `origin.global_position = character.global_position`
 
-To sink the character into the board, just position the origin above the character
-by adding a +Y vector such as:
+### World/Player State
 
-* `origin.global_position = character.global_position + Vector3(0, 2, 0)`
+The state of the world and the players can be maintained in a custom autoload
+singleton script which would be accessible from everywhere. Additionally the
+Staging node contains a "data" dictionary which can be used to hold any custom
+information.
+
+The application is responsible for implementing a persistence mechanism for
+save files. There are numerous articles available on implementing this feature:
+* https://docs.godotengine.org/en/stable/tutorials/io/saving_games.html
+* https://gdscript.com/solutions/how-to-save-and-load-godot-game-data/
+* https://www.youtube.com/watch?v=lXO5Jt957BA
+* https://www.youtube.com/watch?v=mI4HfyBdV-k

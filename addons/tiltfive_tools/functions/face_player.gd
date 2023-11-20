@@ -54,7 +54,7 @@ func _process(delta : float) -> void:
 func _target_transform(weight : float) -> void:
 	# Get the old basis
 	var b_old := _target.transform.basis.orthonormalized()
-	
+
 	# Construct the new basis looking at the camera
 	var dir_local := _target.to_local(_camera.global_position)
 	var b_new := b_old.looking_at(dir_local, Vector3.UP, true)

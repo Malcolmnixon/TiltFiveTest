@@ -72,7 +72,6 @@ alignment = 1
 [node name="Demo3" type="Button" parent="Margin/VBoxContainer/Demo34"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
-disabled = true
 text = "Demo 3
 "
 
